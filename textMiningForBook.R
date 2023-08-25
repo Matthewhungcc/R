@@ -21,11 +21,50 @@ library(viridis)}
 beige.links.all<-
   tibble::tribble(
     ~url,   ~report, ~report.date,
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220112.pdf", 20220112L, "2022-01-12",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220302.pdf", 20220302L, "2022-03-02",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220420.pdf", 20220420L, "2022-04-20",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220601.pdf", 20220601L, "2022-06-01",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220713.pdf", 20220713L, "2022-07-13",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220907.pdf", 20220907L, "2022-09-07",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20221019.pdf", 20221019L, "2022-10-19",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20221130.pdf", 20221130L, "2022-11-30",
+
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210113.pdf", 20210113L, "2021-01-13",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210303.pdf", 20210303L, "2021-03-03",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210414.pdf", 20210414L, "2021-04-14",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210602.pdf", 20210602L, "2021-06-02",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210714.pdf", 20210714L, "2021-07-14",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210908.pdf", 20210908L, "2021-09-08",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20211020.pdf", 20211020L, "2021-10-20",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20211201.pdf", 20211201L, "2021-12-01",
+
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200115.pdf", 20200115L, "2020-01-15",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200304.pdf", 20200304L, "2020-03-04",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200415.pdf", 20200415L, "2020-04-15",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200527.pdf", 20200527L, "2020-05-27",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200715.pdf", 20200715L, "2020-07-15",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200902.pdf", 20200902L, "2020-09-02",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20201021.pdf", 20201021L, "2020-10-21",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20201202.pdf", 20201202L, "2020-12-02",
+
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190116.pdf", 20190116L, "2019-01-16",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190306.pdf", 20190306L, "2019-03-06",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190417.pdf", 20190417L, "2019-04-17",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190605.pdf", 20190605L, "2019-06-05",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190717.pdf", 20190717L, "2019-07-17",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190904.pdf", 20190904L, "2019-09-04",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20191016.pdf", 20191016L, "2019-10-16",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20191127.pdf", 20191127L, "2019-11-27",
+
     "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180117.pdf", 20180117L, "2018-01-17",
     "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180307.pdf", 20180307L, "2018-03-07",
     "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180418.pdf", 20180418L, "2018-04-18",
     "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180530.pdf", 20180530L, "2018-05-30",
     "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180718.pdf", 20180718L, "2018-07-18",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180912.pdf", 20180912L, "2018-09-12",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20181024.pdf", 20181024L, "2018-10-24",
+    "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20181205.pdf", 20181205L, "2018-12-05",
     "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20170118.pdf", 20170118L, "2017-01-18",
     "https://www.federalreserve.gov/monetarypolicy/files/Beigebook_20170301.pdf", 20170301L, "2017-03-01",
     "https://www.federalreserve.gov/monetarypolicy/files/Beigebook_20170419.pdf", 20170419L, "2017-04-19",
@@ -170,7 +209,7 @@ ggplot(fed_sentiment,  aes(rdate, sentiment, fill = sentiment>0)) +
 
 print(g1)
 custom_stop_words3 <- 
-  bind_rows(data_frame(word = c(tolower(month.abb), "one","two","three","four","five","six",
+  bind_rows(tibble(word = c(tolower(month.abb), "one","two","three","four","five","six",
                                 "seven","eight","nine","ten","eleven","twelve","mam","ered",
                                 "produc","ing","quar","ters","sug","quar",'fmam',"sug",
                                 "cient","thirty","pter",
@@ -204,7 +243,7 @@ fed_text_by_month %>%
   group_by(report) %>%
   mutate(id=row_number()) %>%
   ungroup() %>%
-  filter(id<11) %>%
+  filter(id<14) %>%
   ggplot(aes(word, tf_idf, fill = report)) +
   geom_col(show.legend = FALSE) +
   labs(x = NULL, y = "tf-idf") +
@@ -356,6 +395,7 @@ word_cors <-
   group_by(word) %>%
   filter(n() >= 20) %>%
   pairwise_cor(word, section, sort = TRUE)
+
 
 
 g7 <- 

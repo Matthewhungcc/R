@@ -106,7 +106,13 @@ ggplot(fed_sentiment,  aes(index, sentiment, fill = sentiment>0)) +
 ###########################################
 
 # list of reports, comments indicate important events around release of report
-fed.links=c("https://www.federalreserve.gov/monetarypolicy/files/20180713_mprfullreport.pdf",  
+fed.links=c("https://www.federalreserve.gov/monetarypolicy/files/20230616_mprfullreport.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/files/20220617_mprfullreport.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/files/20210709_mprfullreport.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/files/20200612_mprfullreport.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/files/20190705_mprfullreport.pdf",
+            
+            "https://www.federalreserve.gov/monetarypolicy/files/20180713_mprfullreport.pdf",
             "https://www.federalreserve.gov/monetarypolicy/files/20170707_mprfullreport.pdf",
             "https://www.federalreserve.gov/monetarypolicy/files/20160621_mprfullreport.pdf",            # released in jun 2016, but we'll label it July
             "https://www.federalreserve.gov/monetarypolicy/files/20150715_mprfullreport.pdf",            # July 2015  ( before lift off)
@@ -133,7 +139,7 @@ fed.links=c("https://www.federalreserve.gov/monetarypolicy/files/20180713_mprful
 
 
 df_fed <- 
-  data.frame(report=c("Jul2018",paste0("Jul",seq(2017,1996,-1))),stringsAsFactors = FALSE) %>%
+  data.frame(report=c("Jul2023",paste0("Jul",seq(2022,1996,-1))),stringsAsFactors = FALSE) %>%
   mutate(text= map(fed.links,pdf_text)) %>% unnest(text) %>% 
   group_by(report) %>% mutate(page=row_number()) %>%
   ungroup() %>% mutate(text=strsplit(text,"\r")) %>% unnest(text) %>% mutate(text=gsub("\n","",text)) %>%
@@ -148,11 +154,12 @@ total_words <- fed_words %>%
   group_by(report) %>% 
   summarize(total = sum(n))
 
+
 # total words per report
 
-ggplot(data=total_words, aes(x=seq(1996,2018),y=total))+
+ggplot(data=total_words, aes(x=seq(1996,2023),y=total))+
   geom_line(color="#27408b")+
-  geom_point(shape=21,fill="white",color="#27408b",size=3,stroke=1.1)+
+  geom_point(shape=29,fill="white",color="#27408b",size=3,stroke=1.1)+
   scale_y_continuous(labels=scales::comma)+
   theme_ridges(font_family="Roboto")+
   labs(x="year",y="number of words",
@@ -254,7 +261,7 @@ fed_sentiment2 <-
   mutate(sentiment = positive - negative)
 ## Joining, by = "word"
 ## Joining, by = "word"
-ggplot(fed_sentiment2,  aes(factor(1996:2018), sentiment/(negative+positive), fill = sentiment)) +
+ggplot(fed_sentiment2,  aes(factor(1996:2023), sentiment/(negative+positive), fill = sentiment)) +
   geom_col(show.legend = FALSE) +scale_fill_viridis_c(option="C")+
     theme_ridges(font_family="Roboto",font_size=10)+
   labs(x="report for July of each year",y="Sentiment (>0 positive, <0 negtaive)",
