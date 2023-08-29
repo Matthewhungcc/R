@@ -1,5 +1,5 @@
 #http://lenkiefer.com/2018/07/29/beige-ian-statistics/
-
+#install.packages("rvest")
 # load libraries ----
 suppressPackageStartupMessages({
 library(extrafont)
@@ -13,9 +13,21 @@ library(reshape2)
 library(tidyr)
 library(igraph)
 library(widyr)
-library(viridis)}
+library(viridis)
+library(rvest)})
 
-)
+extract_text_from_html <- function(url) {
+  webpage <- read_html(url)
+  paragraphs <- html_nodes(webpage, "p")
+  text <- html_text(paragraphs, trim = TRUE)
+  combined_text <- paste(text, collapse = " ")
+  return(combined_text)
+}
+
+# Example usage
+html_url <- "https://www.federalreserve.gov/monetarypolicy/beigebook202004.htm"
+extracted_text <- extract_text_from_html(html_url)
+print(extracted_text)
 
 fed_import1 <- pdf_text("https://www.federalreserve.gov/monetarypolicy/files/20180713_mprfullreport.pdf")
 
@@ -111,7 +123,6 @@ fed.links=c("https://www.federalreserve.gov/monetarypolicy/files/20230616_mprful
             "https://www.federalreserve.gov/monetarypolicy/files/20210709_mprfullreport.pdf",
             "https://www.federalreserve.gov/monetarypolicy/files/20200612_mprfullreport.pdf",
             "https://www.federalreserve.gov/monetarypolicy/files/20190705_mprfullreport.pdf",
-            
             "https://www.federalreserve.gov/monetarypolicy/files/20180713_mprfullreport.pdf",
             "https://www.federalreserve.gov/monetarypolicy/files/20170707_mprfullreport.pdf",
             "https://www.federalreserve.gov/monetarypolicy/files/20160621_mprfullreport.pdf",            # released in jun 2016, but we'll label it July
@@ -195,10 +206,10 @@ fed_text %>%
 ##############################################################################
 # Custom stop words 
 custom_stop_words <- 
-  bind_rows(data_frame(word = c(tolower(month.abb), "one","two","three","four","five","six",
+  bind_rows(tibble(word = c(tolower(month.abb), "one","two","three","four","five","six",
                                 "seven","eight","nine","ten","eleven","twelve","mam","ered",
                                 "produc","ing","quar","ters","sug","quar",'fmam',"sug",
-                                "cient","thirty","pter",
+                                "cient","thirty","pter", "https", "pp", "ui"
                                 "pants","ter","ening","ances","www.federalreserve.gov",
                                 "tion","fig","ure","figure","src"), 
                        lexicon = c("custom")), 
