@@ -16,19 +16,9 @@ library(widyr)
 library(viridis)
 library(rvest)})
 
-extract_text_from_html <- function(url) {
-  webpage <- read_html(url)
-  paragraphs <- html_nodes(webpage, "p")
-  text <- html_text(paragraphs, trim = TRUE)
-  combined_text <- paste(text, collapse = " ")
-  return(combined_text)
-}
+
 
 # Example usage
-html_url <- "https://www.federalreserve.gov/monetarypolicy/beigebook202004.htm"
-extracted_text <- extract_text_from_html(html_url)
-print(extracted_text)
-
 fed_import1 <- pdf_text("https://www.federalreserve.gov/monetarypolicy/files/20180713_mprfullreport.pdf")
 
 fed_text_raw <- 
@@ -116,42 +106,65 @@ ggplot(fed_sentiment,  aes(index, sentiment, fill = sentiment>0)) +
 
 
 ###########################################
+extract_text_from_html <- function(url) {
+  webpage <- read_html(url)
+  paragraphs <- html_nodes(webpage, "p")
+  text <- html_text(paragraphs, trim = TRUE)
+  combined_text <- paste(text, collapse = " ")
+  return(combined_text)
+}
+get_many_data <- function(urls){
+  combined_text <- ""
+  for (url in urls){
+    text <- extract_text_from_html(url)
+    combined_text <- paste(combined_text, text, sep="")
+    combined_text <- gsub("Accessible", "", combined_text)
+    combined_text <- gsub("version", "", combined_text)
+    combined_text <- gsub("Version", "", combined_text)
+  }
+  return(combined_text)
+}
 
+
+# Example usage
+html_url <- c("https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part3.htm")
+extracted_text <- get_many_data(html_url)
+print(extracted_text)
 # list of reports, comments indicate important events around release of report
-fed.links=c("https://www.federalreserve.gov/monetarypolicy/files/20230616_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20220617_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20210709_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20200612_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20190705_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20180713_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20170707_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20160621_mprfullreport.pdf",            # released in jun 2016, but we'll label it July
-            "https://www.federalreserve.gov/monetarypolicy/files/20150715_mprfullreport.pdf",            # July 2015  ( before lift off)
-            "https://www.federalreserve.gov/monetarypolicy/files/20140715_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20130717_mprfullreport.pdf",            # July 2013  ( after Taper Tantrum)
-            "https://www.federalreserve.gov/monetarypolicy/files/20120717_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20110713_mprfullreport.pdf",            # July 2011  ( early recovery)
-            "https://www.federalreserve.gov/monetarypolicy/files/20100721_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20090721_mprfullreport.pdf",            # July 2009  ( end of Great Recession)
-            "https://www.federalreserve.gov/monetarypolicy/files/20080715_mprfullreport.pdf",
-            "https://www.federalreserve.gov/monetarypolicy/files/20070718_mprfullreport.pdf" ,           # July 2007  ( eve of  Great Recession)
-            "https://www.federalreserve.gov/boarddocs/hh/2006/july/fullreport.pdf",
-            "https://www.federalreserve.gov/boarddocs/hh/2005/july/fullreport.pdf",                      # July 2005  ( housing boom)
-            "https://www.federalreserve.gov/boarddocs/hh/2004/july/fullreport.pdf",
-            "https://www.federalreserve.gov/boarddocs/hh/2003/july/FullReport.pdf" ,                     # July 2003  ( deflation fears)
-            "https://www.federalreserve.gov/boarddocs/hh/2002/july/FullReport.pdf",
-            "https://www.federalreserve.gov/boarddocs/hh/2001/july/FullReport.pdf",                      # July 2001  ( dot come Recession)
-            "https://www.federalreserve.gov/boarddocs/hh/2000/July/FullReport.pdf",
-            "https://www.federalreserve.gov/boarddocs/hh/1999/July/FullReport.pdf",                      # July 1999  ( eve of dotcom Recession)
-            "https://www.federalreserve.gov/boarddocs/hh/1998/july/FullReport.pdf",
-            "https://www.federalreserve.gov/boarddocs/hh/1997/july/FullReport.pdf",                       # July 1997 ( irrational exhuberance)
-            "https://www.federalreserve.gov/boarddocs/hh/1996/july/FullReport.pdf"
+fed.links=list(c("https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part3.htm"),  
+            c("https://www.federalreserve.gov/monetarypolicy/2022-06-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2022-06-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2022-06-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2022-06-mpr-part3.htm"),  
+            c("https://www.federalreserve.gov/monetarypolicy/2021-07-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2021-07-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2021-07-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2021-07-mpr-part3.htm"),  
+            c("https://www.federalreserve.gov/monetarypolicy/2020-06-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2020-06-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2020-06-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2020-06-mpr-part3.htm"),  
+            c("https://www.federalreserve.gov/monetarypolicy/2019-07-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2019-07-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2019-07-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2019-07-mpr-part3.htm"),  
+            c("https://www.federalreserve.gov/monetarypolicy/2018-07-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2018-07-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2018-07-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2018-07-mpr-part3.htm"),  
+            c("https://www.federalreserve.gov/monetarypolicy/2017-07-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2017-07-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2017-07-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2017-07-mpr-part3.htm"), 
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_2016_0621_summary.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20160621_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20160621_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20160621_part3.htm"),            # released in jun 2016, but we'll label it July
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20150715_summary.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20150715_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20150715_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20150715_part3.htm"),         # July 2015  ( before lift off)
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20140715_summary.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20140715_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20140715_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20140715_part3.htm"), 
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20130717_summary.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20130717_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20130717_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20130717_part3.htm"),           # July 2013  ( after Taper Tantrum)
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20120717_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20120717_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20120717_part3.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20120717_part4.htm"), 
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20110713_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20110713_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20110713_part3.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20110713_part4.htm"),           # July 2011  ( early recovery)
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20100721_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20100721_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20100721_part3.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20100721_part4.htm"), 
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20090721_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20090721_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20090721_part3.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20090721_part4.htm"),            # July 2009  ( end of Great Recession)
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20080715_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20080715_part2.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20080715_part3.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20080715_part4.htm"), 
+            c("https://www.federalreserve.gov/monetarypolicy/mpr_20070718_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20070718_part2.htm"),       # July 2007  ( eve of  Great Recession)
+            c("https://www.federalreserve.gov/boarddocs/hh/2006/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/2006/july/Reportsection2.htm"),
+            c("https://www.federalreserve.gov/boarddocs/hh/2005/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/2005/july/Reportsection2.htm"),                      # July 2005  ( housing boom)
+            c("https://www.federalreserve.gov/boarddocs/hh/2004/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/2004/july/Reportsection2.htm"),
+            c("https://www.federalreserve.gov/boarddocs/hh/2003/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/2003/july/Reportsection2.htm") ,                     # July 2003  ( deflation fears)
+            c("https://www.federalreserve.gov/boarddocs/hh/2002/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/2002/july/Reportsection2.htm"),
+            c("https://www.federalreserve.gov/boarddocs/hh/2001/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/2001/july/Reportsection2.htm"),                      # July 2001  ( dot come Recession)
+            c("https://www.federalreserve.gov/boarddocs/hh/2000/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/2000/july/Reportsection2.htm"),
+            c("https://www.federalreserve.gov/boarddocs/hh/1999/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/1999/july/Reportsection2.htm"),                      # July 1999  ( eve of dotcom Recession)
+            c("https://www.federalreserve.gov/boarddocs/hh/1998/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/1998/july/Reportsection2.htm"),
+            c("https://www.federalreserve.gov/boarddocs/hh/1997/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/1997/july/Reportsection2.htm"),                       # July 1997 ( irrational exhuberance)
+            c("https://www.federalreserve.gov/boarddocs/hh/1996/july/Reportsection1.htm", "https://www.federalreserve.gov/boarddocs/hh/1996/july/Reportsection2.htm")
             )
 
 
 df_fed <- 
   data.frame(report=c("Jul2023",paste0("Jul",seq(2022,1996,-1))),stringsAsFactors = FALSE) %>%
-  mutate(text= map(fed.links,pdf_text)) %>% unnest(text) %>% 
+  mutate(text= map(fed.links,get_many_data)) %>% unnest(text) %>% 
   group_by(report) %>% mutate(page=row_number()) %>%
   ungroup() %>% mutate(text=strsplit(text,"\r")) %>% unnest(text) %>% mutate(text=gsub("\n","",text)) %>%
   group_by(report) %>% mutate(line=row_number()) %>% ungroup() %>% select(report,line,page,text)
@@ -209,7 +222,7 @@ custom_stop_words <-
   bind_rows(tibble(word = c(tolower(month.abb), "one","two","three","four","five","six",
                                 "seven","eight","nine","ten","eleven","twelve","mam","ered",
                                 "produc","ing","quar","ters","sug","quar",'fmam',"sug",
-                                "cient","thirty","pter", "https", "pp", "ui"
+                                "cient","thirty","pter", "https", "pp", "ui",
                                 "pants","ter","ening","ances","www.federalreserve.gov",
                                 "tion","fig","ure","figure","src"), 
                        lexicon = c("custom")), 
@@ -256,7 +269,7 @@ fed_sentiment <-
 ggplot(fed_sentiment,  aes(index, sentiment, fill = sentiment>0)) +
   geom_col(show.legend = FALSE) +
   scale_fill_manual(values=c("red","#27408b"))+
-  facet_wrap(~report, ncol = 5, scales = "free_x")+
+  facet_wrap(~report, ncol = 50, scales = "free_x")+
   theme_ridges(font_family="Roboto")+
   labs(x="index (approximately 3 pages per unit)",y="sentiment",
        title="Sentiment through Federal Reserve Monetary Policy Report",
