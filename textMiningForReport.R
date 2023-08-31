@@ -121,15 +121,20 @@ get_many_data <- function(urls){
     combined_text <- gsub("Accessible", "", combined_text)
     combined_text <- gsub("version", "", combined_text)
     combined_text <- gsub("Version", "", combined_text)
+    combined_text <- gsub("text", "", combined_text)
+    combined_text <- gsub("Text", "", combined_text)
   }
   return(combined_text)
 }
 
-
-# Example usage
-html_url <- c("https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part3.htm")
-extracted_text <- get_many_data(html_url)
-print(extracted_text)
+# fed.links=list(c("https://www.federalreserve.gov/monetarypolicy/mpr_20070718_part1.htm", "https://www.federalreserve.gov/monetarypolicy/mpr_20070718_part2.htm"))
+# df_fed <- 
+#   data.frame(report="Jul2023",stringsAsFactors = FALSE) %>%
+#   mutate(text= map(fed.links,get_many_data)) %>% unnest(text) %>% 
+#   group_by(report) %>% mutate(page=row_number()) %>%
+#   ungroup() %>% mutate(text=strsplit(text,"\r")) %>% unnest(text) %>% mutate(text=gsub("\n","",text)) %>%
+#   group_by(report) %>% mutate(line=row_number()) %>% ungroup() %>% select(report,line,page,text)
+# print(df_fed)
 # list of reports, comments indicate important events around release of report
 fed.links=list(c("https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2023-06-mpr-part3.htm"),  
             c("https://www.federalreserve.gov/monetarypolicy/2022-06-mpr-summary.htm", "https://www.federalreserve.gov/monetarypolicy/2022-06-mpr-part1.htm", "https://www.federalreserve.gov/monetarypolicy/2022-06-mpr-part2.htm", "https://www.federalreserve.gov/monetarypolicy/2022-06-mpr-part3.htm"),  
@@ -257,11 +262,12 @@ fed_textb %>%
        subtitle="Top 10 terms by tf-idf statistic: term frequncy and inverse document frequency",
        caption="@lenkiefer Source: Federal Reserve Board Monetary Policy Reports\nNote: omits stop words, date abbreviations and numbers.")
 ################################################################
+print(fed_text)
 fed_sentiment <-
   fed_text %>%
   anti_join(custom_stop_words2) %>%
   inner_join(get_sentiments("bing")) %>%
-  count(report, index = line %/% 3, sentiment) %>%
+  count(report, index = line %/% 5, sentiment) %>%
   spread(sentiment, n, fill = 0) %>%
   mutate(sentiment = positive - negative)
 ## Joining, by = "word"
@@ -269,7 +275,7 @@ fed_sentiment <-
 ggplot(fed_sentiment,  aes(index, sentiment, fill = sentiment>0)) +
   geom_col(show.legend = FALSE) +
   scale_fill_manual(values=c("red","#27408b"))+
-  facet_wrap(~report, ncol = 50, scales = "free_x")+
+  facet_wrap(~report, ncol = 5, scales = "free_x")+
   theme_ridges(font_family="Roboto")+
   labs(x="index (approximately 3 pages per unit)",y="sentiment",
        title="Sentiment through Federal Reserve Monetary Policy Report",

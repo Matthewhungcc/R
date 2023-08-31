@@ -246,6 +246,8 @@ custom_stop_words3 <-
                                 "tion","fig","ure","figure","src"), 
                        lexicon = c("custom")), 
             stop_words)
+options(max.print = Inf)
+print(class(stop_words))
 fed_text_by_month <- 
   fed_text %>%
   filter(lubridate::month(rdate)==7) %>% 
